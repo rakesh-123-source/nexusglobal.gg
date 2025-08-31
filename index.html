@@ -152,6 +152,7 @@
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const API_BASE_URL = 'http://us6.endercloud.host:4599/api/v1';
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
@@ -168,63 +169,81 @@
                 });
             }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-            const fetchAPIData = async () => {
+            const fetchBotInfo = async () => {
                 try {
-                    const response = await fetch('http://us6.endercloud.host:4599/api/v1/data');
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const response = await fetch(`${API_BASE_URL}/bot-info`);
+                    if (!response.ok) throw new Error('Network response was not ok for bot-info');
                     const data = await response.json();
-                    document.title = `${data.bot.name} - The Ultimate All-in-One Discord Bot`;
-                    document.getElementById('bot-name-header').textContent = data.bot.name;
-                    document.getElementById('bot-name-btn1').textContent = data.bot.name;
+                    document.title = `${data.name} - The Ultimate All-in-One Discord Bot`;
+                    document.getElementById('bot-name-header').textContent = data.name;
+                    document.getElementById('bot-name-btn1').textContent = data.name;
                     const logoImg = document.getElementById('bot-logo-img');
                     const logoSvg = document.getElementById('bot-logo-svg');
-                    if (data.bot.avatar_url) {
-                        logoImg.src = data.bot.avatar_url;
+                    if (data.avatar_url) {
+                        logoImg.src = data.avatar_url;
                         logoImg.classList.remove('hidden');
                         logoSvg.classList.add('hidden');
                     }
-                    document.getElementById('invite-link-button').href = data.bot.invite_url;
-                    document.getElementById('support-link-button').href = data.bot.support_server_url;
-                    document.getElementById('support-link-button-2').href = data.bot.support_server_url;
-                    document.getElementById('footer-text').innerHTML = `&copy; 2025 ${data.bot.name}. All Rights Reserved.`;
-                    animateValue("servers-count", 0, data.stats.total_servers, 1500);
-                    animateValue("users-count", 0, data.stats.total_users, 1500);
-                    animateValue("commands-count", 0, data.stats.commands_count, 1500);
-                    document.getElementById('latency').textContent = `${data.stats.latency_ms}ms`;
-                    document.getElementById('uptime').innerHTML = formatUptime(data.stats.uptime_seconds);
+                    document.getElementById('invite-link-button').href = data.invite_url;
+                    document.getElementById('support-link-button').href = data.support_server_url;
+                    document.getElementById('support-link-button-2').href = data.support_server_url;
+                    document.getElementById('footer-text').innerHTML = `&copy; 2025 ${data.name}. All Rights Reserved.`;
                     const botDetailsCard = document.getElementById('bot-details-card');
                     const ownerDetailsCard = document.getElementById('owner-details-card');
-                    const botCreatedAt = new Date(data.bot.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    const ownerCreatedAt = new Date(data.bot.owner.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    botDetailsCard.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4">About ${data.bot.name}</h3><img src="${data.bot.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-blue-500"><p class="text-gray-400">ID: ${data.bot.id}</p><p class="text-gray-400">Created: ${botCreatedAt}</p>`;
-                    ownerDetailsCard.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4">Bot Owner</h3><img src="${data.bot.owner.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-gray-500"><p class="text-xl font-semibold">${data.bot.owner.name}</p><p class="text-gray-400">ID: ${data.bot.owner.id}</p><p class="text-gray-400">Joined Discord: ${ownerCreatedAt}</p>`;
+                    const botCreatedAt = new Date(data.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    const ownerCreatedAt = new Date(data.owner.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    botDetailsCard.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4">About ${data.name}</h3><img src="${data.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-blue-500"><p class="text-gray-400">ID: ${data.id}</p><p class="text-gray-400">Created: ${botCreatedAt}</p>`;
+                    ownerDetailsCard.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4">Bot Owner</h3><img src="${data.owner.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-gray-500"><p class="text-xl font-semibold">${data.owner.name}</p><p class="text-gray-400">ID: ${data.owner.id}</p><p class="text-gray-400">Joined Discord: ${ownerCreatedAt}</p>`;
+                } catch (error) {
+                    console.error("Failed to fetch bot info:", error);
+                }
+            };
+            const fetchGlobalStats = async () => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/global-stats`);
+                    if (!response.ok) throw new Error('Network response was not ok for global-stats');
+                    const data = await response.json();
+                    animateValue("servers-count", 0, data.total_servers, 1500);
+                    animateValue("users-count", 0, data.total_users, 1500);
+                    animateValue("commands-count", 0, data.commands_count, 1500);
+                    document.getElementById('latency').textContent = `${data.latency_ms}ms`;
+                    document.getElementById('uptime').innerHTML = formatUptime(data.uptime_seconds);
+                } catch (error) {
+                    console.error("Failed to fetch global stats:", error);
+                    animateValue("servers-count", 0, 150000, 1500);
+                    animateValue("users-count", 0, 25000000, 1500);
+                    animateValue("commands-count", 0, 200, 1500);
+                    document.getElementById('latency').textContent = `N/A`;
+                    document.getElementById('uptime').textContent = `N/A`;
+                }
+            };
+            const fetchPremiumGuilds = async () => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/premium-guilds`);
+                    if (!response.ok) throw new Error('Network response was not ok for premium-guilds');
+                    const premiumGuilds = await response.json();
                     const premiumContainer = document.getElementById('premium-servers-container');
-                    if (premiumContainer && data.guilds) {
-                        const premiumGuilds = data.guilds.filter(g => g.premium);
+                    if (premiumContainer) {
                         premiumContainer.innerHTML = '';
-                        if(premiumGuilds.length === 0){ premiumContainer.innerHTML = `<p class="text-center text-gray-400 col-span-full">No premium servers to display yet!</p>`;}
-                        else {
+                        if (premiumGuilds.length === 0) {
+                            premiumContainer.innerHTML = `<p class="text-center text-gray-400 col-span-full">No premium servers to display yet!</p>`;
+                        } else {
                            premiumGuilds.slice(0, 3).forEach(guild => {
                                 const guildCard = `
                                     <div class="card p-6 rounded-lg text-center fade-in-up">
                                         <img src="${guild.icon_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-indigo-500" alt="${guild.name} Icon" onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png';">
                                         <h4 class="text-xl font-bold text-white truncate">${guild.name}</h4>
                                         <p class="text-gray-400">${guild.member_count.toLocaleString()} Members</p>
-                                        <p class="text-indigo-400 font-semibold mt-1">${guild.premium.plan_name}</p>
+                                        <p class="text-indigo-400 font-semibold mt-1">${guild.plan}</p>
                                     </div>
                                 `;
                                 premiumContainer.innerHTML += guildCard;
                             });
+                             document.querySelectorAll('#premium-servers-container .fade-in-up').forEach(el => observer.observe(el));
                         }
-                         document.querySelectorAll('#premium-servers-container .fade-in-up').forEach(el => observer.observe(el));
                     }
-                } catch (error) {
-                    console.error("Failed to fetch bot data:", error);
-                    animateValue("servers-count", 0, 150000, 1500);
-                    animateValue("users-count", 0, 25000000, 1500);
-                    animateValue("commands-count", 0, 200, 1500);
-                    document.getElementById('latency').textContent = `N/A`;
-                    document.getElementById('uptime').textContent = `N/A`;
+                } catch(error) {
+                    console.error("Failed to fetch premium guilds:", error);
                 }
             };
             function formatUptime(seconds) {
@@ -248,7 +267,9 @@
                 };
                 window.requestAnimationFrame(step);
             }
-            fetchAPIData();
+            fetchBotInfo();
+            fetchGlobalStats();
+            fetchPremiumGuilds();
         });
         function openLegalTab(tabId) {
             document.querySelectorAll('#legal-pages details').forEach(d => d.open = false);
