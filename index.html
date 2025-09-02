@@ -10,177 +10,280 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1120; color: #E5E7EB; overflow-x: hidden; }
-        .header-glow { box-shadow: 0 0 60px rgba(59, 130, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.15); }
-        .btn-primary { background: linear-gradient(90deg, #3B82F6, #6D28D9); transition: all 0.3s ease; }
-        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(99, 102, 241, 0.6); }
-        .btn-secondary { background-color: #374151; transition: all 0.3s ease; }
-        .btn-secondary:hover { background-color: #4B5563; transform: scale(1.05); }
-        .card { display: flex; flex-direction: column; background-color: rgba(31, 41, 55, 0.5); border: 1px solid #374151; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.25), 0 4px 10px -2px rgba(59, 130, 246, 0.15); border-color: #3B82F6; }
+        :root {
+            --background-color: #0B1120;
+            --text-color: #E5E7EB;
+            --primary-color-start: #3B82F6;
+            --primary-color-end: #6D28D9;
+            --card-bg-color: rgba(31, 41, 55, 0.5);
+            --card-border-color: #374151;
+            --card-hover-border-color: #3B82F6;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--background-color); 
+            color: var(--text-color); 
+            overflow-x: hidden; 
+        }
+        .header-glow { 
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.15); 
+        }
+        .btn {
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .btn-primary { 
+            background: linear-gradient(90deg, var(--primary-color-start), var(--primary-color-end)); 
+        }
+        .btn:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.6); 
+        }
+        .btn-secondary { 
+            background-color: #374151; 
+        }
+        .btn-secondary:hover { 
+            background-color: #4B5563;
+        }
+        .card { 
+            display: flex; 
+            flex-direction: column; 
+            background-color: var(--card-bg-color); 
+            border: 1px solid var(--card-border-color); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; 
+        }
+        .card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.25), 0 4px 10px -2px rgba(59, 130, 246, 0.15); 
+            border-color: var(--card-hover-border-color); 
+        }
         nav details > summary { list-style: none; }
         nav details > summary::-webkit-details-marker { display: none; }
+        
+        /* Animation Classes */
         .fade-in-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+        
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-animate { animation: pulse 2.5s infinite; }
-        .background-grid { background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 2rem 2rem; }
-        .feature-icon { background: linear-gradient(145deg, #3B82F6, #1E3A8A); }
-        details summary { transition: margin 0.2s ease; }
-        details[open] summary { margin-bottom: 0.5rem; }
+        
+        /* Background & decorative elements */
+        .background-grid { 
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); 
+            background-size: 2rem 2rem; 
+        }
+        .feature-icon { background: linear-gradient(145deg, var(--primary-color-start), #1E3A8A); }
         .aurora-background { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; }
         @keyframes aurora { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .aurora { position: absolute; left: 50%; top: 50%; width: 140vmax; height: 140vmax; background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(109, 40, 217, 0.1) 40%, rgba(11, 17, 32, 0) 70%); transform: translate(-50%, -50%); animation: aurora 20s ease-in-out infinite; }
+        .aurora { 
+            position: absolute; left: 50%; top: 50%; width: 140vmax; height: 140vmax; 
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(109, 40, 217, 0.1) 40%, rgba(11, 17, 32, 0) 70%); 
+            transform: translate(-50%, -50%); 
+            animation: aurora 20s ease-in-out infinite; 
+        }
         .banner-card { background-size: cover; background-position: center; position: relative; }
-        .banner-card::before { content: ''; position: absolute; inset: 0; background: rgba(11, 17, 32, 0.7); backdrop-filter: blur(2px); border-radius: 0.5rem; }
+        .banner-card::before { 
+            content: ''; position: absolute; inset: 0; 
+            background: rgba(11, 17, 32, 0.7); backdrop-filter: blur(2px); border-radius: 0.5rem; 
+        }
         .banner-card > * { position: relative; z-index: 2; }
+
+        /* Page switching */
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--background-color); }
+        ::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6B7280; }
     </style>
 </head>
 <body class="antialiased background-grid">
-    <header id="home" class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-700 header-glow">
+    <!-- Header -->
+    <header id="header" class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-700 header-glow">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white flex items-center">
+            <a href="#" class="text-2xl font-bold text-white flex items-center" onclick="showPage('home')">
                 <img id="bot-logo-img" class="hidden h-8 w-8 rounded-full mr-2">
                 <svg id="bot-logo-svg" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-2 text-blue-400"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
                 <span id="bot-name-header">Nexus</span>
             </a>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="text-gray-300 hover:text-blue-400 transition">Home</a>
-                <a href="#features" class="text-gray-300 hover:text-blue-400 transition">Features</a>
-                <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition">Pricing</a>
-                <a href="#faq" class="text-gray-300 hover:text-blue-400 transition">FAQ</a>
+                <a href="#home" onclick="showPage('home')" class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Home</a>
+                <a href="#features" onclick="showPage('home'); document.getElementById('features').scrollIntoView();" class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Features</a>
+                <a href="#servers" onclick="showPage('servers')" class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Servers</a>
+                <a href="#pricing" onclick="showPage('home'); document.getElementById('pricing').scrollIntoView();" class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Pricing</a>
                 <details class="relative">
                     <summary class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Legal</summary>
                     <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 border border-gray-700 z-10">
-                        <a href="#legal-pages" onclick="openLegalTab('terms')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Terms</a>
-                        <a href="#legal-pages" onclick="openLegalTab('privacy')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Privacy</a>
-                        <a href="#legal-pages" onclick="openLegalTab('shipping')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Shipping</a>
-                        <a href="#legal-pages" onclick="openLegalTab('refunds')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Refunds</a>
+                        <a href="#terms" onclick="showPage('terms')" class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Terms & Conditions</a>
+                        <a href="#privacy" onclick="showPage('privacy')" class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Privacy Policy</a>
+                        <a href="#shipping" onclick="showPage('shipping')" class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Shipping Policy</a>
+                        <a href="#refunds" onclick="showPage('refunds')" class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Refunds Policy</a>
                     </div>
                 </details>
-                <a href="#contact" class="text-gray-300 hover:text-blue-400 transition">Contact</a>
+                <a href="#contact" onclick="showPage('contact')" class="cursor-pointer text-gray-300 hover:text-blue-400 transition">Contact Us</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2"><a href="#home" class="block text-gray-300 hover:text-blue-400 transition">Home</a><a href="#features" class="block text-gray-300 hover:text-blue-400 transition">Features</a><a href="#pricing" class="block text-gray-300 hover:text-blue-400 transition">Pricing</a><a href="#faq" class="block text-gray-300 hover:text-blue-400 transition">FAQ</a><a href="#legal-pages" class="block text-gray-300 hover:text-blue-400 transition">Legal</a><a href="#contact" class="block text-gray-300 hover:text-blue-400 transition">Contact</a></div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+            <a href="#home" onclick="showPage('home');" class="mobile-nav-link">Home</a>
+            <a href="#features" onclick="showPage('home'); document.getElementById('features').scrollIntoView();" class="mobile-nav-link">Features</a>
+            <a href="#servers" onclick="showPage('servers')" class="mobile-nav-link">Servers</a>
+            <a href="#pricing" onclick="showPage('home'); document.getElementById('pricing').scrollIntoView();" class="mobile-nav-link">Pricing</a>
+            <a href="#terms" onclick="showPage('terms')" class="mobile-nav-link">Terms</a>
+            <a href="#privacy" onclick="showPage('privacy')" class="mobile-nav-link">Privacy</a>
+            <a href="#contact" onclick="showPage('contact')" class="mobile-nav-link">Contact</a>
+        </div>
     </header>
+
     <main class="container mx-auto px-6 py-12">
-        <section class="text-center py-12 md:py-20 relative">
-            <div class="aurora-background"><div class="aurora"></div></div>
-            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-4 animate-fade-in">The Ultimate All-in-One Discord Bot</h1>
-            <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 animate-fade-in" style="animation-delay: 0.2s;">Moderation, music, fun, utility, and robust premium features. Everything your server needs to thrive.</p>
-            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in" style="animation-delay: 0.4s;">
-                <a id="invite-link-button" href="#" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg inline-block pulse-animate w-full sm:w-auto">Add <span id="bot-name-btn1">Nexus</span> to Discord</a>
-                <a id="support-link-button" href="#" class="btn-secondary text-white font-bold py-3 px-8 rounded-full text-lg inline-block w-full sm:w-auto">Join Support Server</a>
-            </div>
-        </section>
-        <section id="stats" class="py-20">
-             <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Live Bot Statistics</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 text-center">
-                <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="servers-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Servers</p></div>
-                <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="users-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Users</p></div>
-                <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="commands-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Commands</p></div>
-                <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="latency" class="text-3xl md:text-4xl font-bold text-white">0ms</h3><p class="text-sm md:text-base text-gray-400">Latency</p></div>
-                <div class="fade-in-up card p-4 sm:p-6 rounded-lg col-span-2 sm:col-span-1 md:col-span-1"><h3 id="uptime" class="text-2xl md:text-3xl font-bold text-white">0d 0h 0m</h3><p class="text-sm md:text-base text-gray-400">Uptime</p></div>
-            </div>
-        </section>
-        <section id="features" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Everything Your Server Needs</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3 class="text-2xl font-bold text-white mb-4">Advanced Moderation</h3><p class="text-gray-400">Keep your server safe with auto-moderation, comprehensive logging, and powerful commands like ban, kick, and mute.</p></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M9 18V5l12-2v13M9 18l-4 3V8l4-3"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div><h3 class="text-2xl font-bold text-white mb-4">High-Quality Music</h3><p class="text-gray-400">Enjoy lag-free music streaming from various sources, create playlists, and use audio filters for the perfect vibe.</p></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="14" x2="16" y2="14"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div><h3 class="text-2xl font-bold text-white mb-4">Engagement & Fun</h3><p class="text-gray-400">Boost activity with automated welcome messages, fun mini-games, meme generators, and an XP/leveling system.</p></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div><h3 class="text-2xl font-bold text-white mb-4">Powerful Utility</h3><p class="text-gray-400">Access server statistics, user information, reminders, custom embeds, and reaction roles with simple commands.</p></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3 class="text-2xl font-bold text-white mb-4">Premium Tiers</h3><p class="text-gray-400">Unlock exclusive features and enhance server capabilities with our Elite and Prime plans, or get personal No-Prefix.</p></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M20.94 18.06a9 9 0 1 1-3.48-3.48"></path><path d="M12 12v6"></path><path d="M12 6v1"></path></svg></div><h3 class="text-2xl font-bold text-white mb-4">24/7 Uptime</h3><p class="text-gray-400">Nexus is hosted on reliable infrastructure, ensuring your server's companion is always online when you need it.</p></div>
-            </div>
-        </section>
-        <section id="bot-info" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Bot & Owner Details</h2>
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div id="bot-details-card" class="card banner-card p-8 rounded-lg fade-in-up">
-                    <div class="text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-8 bg-gray-700 rounded w-1/2 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-3/4 mx-auto mt-2"></div></div></div>
+
+        <!-- Main Homepage Content -->
+        <div id="home" class="page-content active">
+            <section class="text-center py-12 md:py-20 relative">
+                <div class="aurora-background"><div class="aurora"></div></div>
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-4 animate-fade-in">The Ultimate All-in-One Discord Bot</h1>
+                <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 animate-fade-in" style="animation-delay: 0.2s;">Moderation, music, fun, utility, and robust premium features. Everything your server needs to thrive.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in" style="animation-delay: 0.4s;">
+                    <a id="invite-link-button" href="#" class="btn btn-primary text-white font-bold py-3 px-8 rounded-full text-lg inline-block pulse-animate w-full sm:w-auto">Add <span id="bot-name-btn1">Nexus</span> to Discord</a>
+                    <a id="support-link-button" href="#" class="btn btn-secondary text-white font-bold py-3 px-8 rounded-full text-lg inline-block w-full sm:w-auto">Join Support Server</a>
                 </div>
-                <div id="owner-details-card" class="card banner-card p-8 rounded-lg fade-in-up">
-                    <div class="text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-8 bg-gray-700 rounded w-1/2 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-3/4 mx-auto mt-2"></div></div></div>
+            </section>
+            
+            <section id="stats" class="py-20">
+                <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Live Bot Statistics</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 text-center">
+                    <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="servers-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Servers</p></div>
+                    <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="users-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Users</p></div>
+                    <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="commands-count" class="text-3xl md:text-4xl font-bold text-white">0</h3><p class="text-sm md:text-base text-gray-400">Commands</p></div>
+                    <div class="fade-in-up card p-4 sm:p-6 rounded-lg"><h3 id="latency" class="text-3xl md:text-4xl font-bold text-white">0ms</h3><p class="text-sm md:text-base text-gray-400">Latency</p></div>
+                    <div class="fade-in-up card p-4 sm:p-6 rounded-lg col-span-2 sm:col-span-1 md:col-span-1"><h3 id="uptime" class="text-2xl md:text-3xl font-bold text-white">0d 0h 0m</h3><p class="text-sm md:text-base text-gray-400">Uptime</p></div>
                 </div>
-            </div>
-        </section>
-        <section id="pricing" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Unlock Premium Features</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="card p-8 rounded-lg border-2 border-blue-500 fade-in-up"><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Nexus Elite</h3><p class="text-gray-400 mb-6">Core premium enhancements.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹79</li><li>✓ 6 Months: ₹389</li><li>✓ Yearly: ₹779</li></ul></div><a href="#" class="btn-primary w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg">Purchase Elite</a></div>
-                <div class="card p-8 rounded-lg border-2 border-indigo-500 relative overflow-hidden fade-in-up"><div class="absolute top-0 right-0 bg-indigo-500 text-white text-xs font-bold px-3 py-1 transform translate-x-1/4 -translate-y-1/4 rotate-45">Popular</div><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Nexus Prime</h3><p class="text-gray-400 mb-6">The ultimate server experience.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹119</li><li>✓ 6 Months: ₹589</li><li>✓ Yearly: ₹1179</li></ul></div><a href="#" class="bg-indigo-500 hover:bg-indigo-600 w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg transition duration-300">Purchase Prime</a></div>
-                <div class="card p-8 rounded-lg fade-in-up"><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Personal No-Prefix</h3><p class="text-gray-400 mb-6">Use commands without a prefix.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹39</li><li>✓ 6 Months: ₹189</li><li>✓ Yearly: ₹389</li><li>✓ Lifetime: ₹999</li></ul></div><a href="#" class="btn-secondary w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg">Purchase No-Prefix</a></div>
-            </div>
-        </section>
-         <section id="featured-servers" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Featured Premium Servers</h2>
-            <div id="premium-servers-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="card p-6 rounded-lg text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div></div>
-                <div class="card p-6 rounded-lg text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div></div>
-                <div class="card p-6 rounded-lg text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div></div>
-            </div>
-        </section>
-        <section id="faq" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Frequently Asked Questions</h2>
-            <div class="max-w-3xl mx-auto space-y-4 fade-in-up">
-                <details class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">How do I get started with Nexus?</summary><div class="p-6 pt-0 text-gray-400"><p>Simply click the "Add Nexus to Discord" button on our website to invite the bot to your server! Once invited, you can type `/help` to see a full list of commands and get started.</p></div></details>
-                <details class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">How does the premium subscription work?</summary><div class="p-6 pt-0 text-gray-400"><p>You can purchase premium through our website. Once the payment is complete, the premium features for the selected plan (Elite or Prime) are automatically activated on the server you purchased it for.</p></div></details>
-                <details class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Can I transfer my premium subscription to another server?</summary><div class="p-6 pt-0 text-gray-400"><p>Yes, the original purchaser of a premium plan can transfer it to another server they manage using the `/premium transfer` command.</p></div></details>
-            </div>
-        </section>
-        <section id="legal-pages" class="py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Legal Information</h2>
-            <div class="max-w-4xl mx-auto space-y-4 fade-in-up">
-                <details id="terms-details" class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Terms and Conditions</summary><div class="p-6 pt-0 text-gray-400 space-y-4"><p>Welcome to Nexus! By purchasing or using our services, you accept these terms and conditions in full.</p><h4 class="text-lg font-semibold text-gray-200">1. License to Use</h4><p>Nexus and/or its licensors own the intellectual property rights for all material on Nexus. All rights are reserved.</p><h4 class="text-lg font-semibold text-gray-200">2. User Responsibilities</h4><p>You are responsible for your conduct and content while using our services. You agree to use the service in compliance with all applicable laws. You must not use our service for malicious purposes.</p><h4 class="text-lg font-semibold text-gray-200">3. Premium Services</h4><p>Payments are processed via Razorpay. Premium features are tied to the Discord entity (server/user) for which they were purchased and are non-transferable except where stated.</p><h4 class="text-lg font-semibold text-gray-200">4. Termination</h4><p>We may terminate your access to our service immediately, without prior notice, if you breach the Terms.</p></div></details>
-                <details id="privacy-details" class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Privacy Policy</summary><div class="p-6 pt-0 text-gray-400 space-y-4"><p>Your privacy is important to us. It is Nexus's policy to respect your privacy regarding any information we may collect.</p><h4 class="text-lg font-semibold text-gray-200">1. Data We Collect</h4><p>We only collect data necessary for the bot to function, such as server and user IDs for configurations and premium services. We do not store message content. All payments are handled by Razorpay, and we do not see or store your sensitive payment information.</p><h4 class="text-lg font-semibold text-gray-200">2. How We Use Data</h4><p>Data is used exclusively to provide and improve our services, manage premium subscriptions, and for internal analytics. We never sell your data.</p><h4 class="text-lg font-semibold text-gray-200">3. Data Security</h4><p>We implement security measures to protect your information. Data is stored in a secure database and accessed only when necessary.</p></div></details>
-                <details id="shipping-details" class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Shipping & Delivery Policy</summary><div class="p-6 pt-0 text-gray-400 space-y-4"><p>All products and services provided by Nexus are digital. There are no physical items to be shipped.</p><p>Premium features are delivered **instantly** upon successful payment confirmation. The features will be automatically activated on the Discord server or for the user account specified during the purchase process.</p><p>If you experience any issues with your premium activation after a successful payment, please contact us immediately through our support server.</p></div></details>
-                <details id="refunds-details" class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Cancellation & Refund Policy</summary><div class="p-6 pt-0 text-gray-400 space-y-4"><h4 class="text-lg font-semibold text-gray-200">Cancellation</h4><p>You can manage and cancel your recurring subscriptions at any time. Your premium access will remain active until the end of the current billing cycle.</p><h4 class="text-lg font-semibold text-gray-200">No Refund Policy</h4><p>Due to the nature of our products being instantly delivered digital services, **all purchases are final and non-refundable**. We do not offer refunds or credits for partial subscription periods, accidental purchases, or dissatisfaction. By completing your purchase, you agree to this policy.</p></div></details>
-                 <details id="contact-details" class="card rounded-lg overflow-hidden"><summary class="cursor-pointer p-6 text-xl font-semibold text-white">Contact Us</summary><div class="p-6 pt-0 text-gray-400 space-y-4"><p>We're here to help with any questions or issues you may have. For the fastest response, please join our official support server and open a ticket.</p><p><strong>Primary Support:</strong> <a href="https://discord.gg/HwHD8a5QXa" target="_blank" class="text-blue-400 hover:underline">Discord Support Server</a></p><p><strong>Business Inquiries:</strong> For business-related matters, you can reach us via email at <a href="mailto:support@nexusbot.gg" class="text-blue-400 hover:underline">support@nexusbot.gg</a>. We aim to respond to emails within 48 hours.</p></div></details>
-            </div>
-        </section>
-        <section id="contact" class="text-center py-20 fade-in-up">
-            <h2 class="text-4xl font-bold text-white mb-6">Have a Question?</h2>
-            <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">Join our community server to get help, report bugs, or just hang out with other Nexus users.</p>
-            <div class="flex justify-center items-center">
-                <a id="support-link-button-2" href="#" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg inline-block">Join Support Server</a>
-            </div>
-        </section>
+            </section>
+            
+            <section id="features" class="py-20">
+                 <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Everything Your Server Needs</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature Cards -->
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3 class="text-2xl font-bold text-white mb-4">Advanced Moderation</h3><p class="text-gray-400">Keep your server safe with auto-moderation, comprehensive logging, and powerful commands like ban, kick, and mute.</p></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M9 18V5l12-2v13M9 18l-4 3V8l4-3"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div><h3 class="text-2xl font-bold text-white mb-4">High-Quality Music</h3><p class="text-gray-400">Enjoy lag-free music streaming from various sources, create playlists, and use audio filters for the perfect vibe.</p></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="14" x2="16" y2="14"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div><h3 class="text-2xl font-bold text-white mb-4">Engagement & Fun</h3><p class="text-gray-400">Boost activity with automated welcome messages, fun mini-games, meme generators, and an XP/leveling system.</p></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div><h3 class="text-2xl font-bold text-white mb-4">Powerful Utility</h3><p class="text-gray-400">Access server statistics, user information, reminders, custom embeds, and reaction roles with simple commands.</p></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3 class="text-2xl font-bold text-white mb-4">Premium Tiers</h3><p class="text-gray-400">Unlock exclusive features and enhance server capabilities with our Elite and Prime plans, or get personal No-Prefix.</p></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M20.94 18.06a9 9 0 1 1-3.48-3.48"></path><path d="M12 12v6"></path><path d="M12 6v1"></path></svg></div><h3 class="text-2xl font-bold text-white mb-4">24/7 Uptime</h3><p class="text-gray-400">Nexus is hosted on reliable infrastructure, ensuring your server's companion is always online when you need it.</p></div>
+                </div>
+            </section>
+
+            <section id="bot-info" class="py-20">
+                <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Bot & Owner Details</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div id="bot-details-card" class="card banner-card p-8 rounded-lg fade-in-up">
+                        <div class="text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-8 bg-gray-700 rounded w-1/2 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-3/4 mx-auto mt-2"></div></div></div>
+                    </div>
+                    <div id="owner-details-card" class="card banner-card p-8 rounded-lg fade-in-up">
+                        <div class="text-center"><div class="animate-pulse"><div class="w-24 h-24 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-8 bg-gray-700 rounded w-1/2 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-3/4 mx-auto mt-2"></div></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pricing" class="py-20">
+                <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">Unlock Premium Features</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="card p-8 rounded-lg border-2 border-blue-500 fade-in-up"><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Nexus Elite</h3><p class="text-gray-400 mb-6">Core premium enhancements.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹79</li><li>✓ 6 Months: ₹389</li><li>✓ Yearly: ₹779</li></ul></div><a href="#" class="btn btn-primary w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg">Purchase Elite</a></div>
+                    <div class="card p-8 rounded-lg border-2 border-indigo-500 relative overflow-hidden fade-in-up"><div class="absolute top-0 right-0 bg-indigo-500 text-white text-xs font-bold px-3 py-1 transform translate-x-1/4 -translate-y-1/4 rotate-45">Popular</div><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Nexus Prime</h3><p class="text-gray-400 mb-6">The ultimate server experience.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹119</li><li>✓ 6 Months: ₹589</li><li>✓ Yearly: ₹1179</li></ul></div><a href="#" class="btn bg-indigo-500 hover:bg-indigo-600 w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg transition duration-300">Purchase Prime</a></div>
+                    <div class="card p-8 rounded-lg fade-in-up"><div class="flex-grow"><h3 class="text-2xl font-bold text-white">Personal No-Prefix</h3><p class="text-gray-400 mb-6">Use commands without a prefix.</p><ul class="space-y-4 text-gray-300"><li>✓ Monthly: ₹39</li><li>✓ 6 Months: ₹189</li><li>✓ Yearly: ₹389</li><li>✓ Lifetime: ₹999</li></ul></div><a href="#" class="btn btn-secondary w-full text-center mt-auto pt-3 pb-3 text-white font-bold px-4 rounded-lg">Purchase No-Prefix</a></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Servers Page -->
+        <div id="servers" class="page-content">
+             <section class="py-20">
+                <h2 class="text-4xl font-bold text-center text-white mb-6 fade-in-up">Servers Using Nexus</h2>
+                <p class="text-lg text-gray-400 text-center max-w-2xl mx-auto mb-12 fade-in-up">Explore some of the communities powered by our bot.</p>
+                <div class="mb-8 fade-in-up">
+                    <input type="text" id="server-search" placeholder="Search for a server..." class="w-full max-w-lg mx-auto block bg-gray-800 border border-gray-600 rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div id="servers-container" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Skeletons for loading state -->
+                    <div class="card p-4 text-center animate-pulse"><div class="w-20 h-20 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div>
+                    <div class="card p-4 text-center animate-pulse"><div class="w-20 h-20 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div>
+                    <div class="card p-4 text-center animate-pulse"><div class="w-20 h-20 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div>
+                    <div class="card p-4 text-center animate-pulse"><div class="w-20 h-20 rounded-full bg-gray-700 mx-auto mb-4"></div><div class="h-6 bg-gray-700 rounded w-3/4 mx-auto"></div><div class="h-4 bg-gray-700 rounded w-1/2 mx-auto mt-2"></div></div>
+                </div>
+                <p id="no-servers-found" class="text-center text-gray-400 col-span-full hidden mt-8">No servers found.</p>
+            </section>
+        </div>
+
+        <!-- Legal Pages -->
+        <div id="terms" class="page-content legal-page"></div>
+        <div id="privacy" class="page-content legal-page"></div>
+        <div id="shipping" class="page-content legal-page"></div>
+        <div id="refunds" class="page-content legal-page"></div>
+        <div id="contact" class="page-content legal-page"></div>
+
     </main>
+
     <footer class="border-t border-gray-700 bg-gray-900/50">
         <div class="container mx-auto px-6 py-8 text-center text-gray-500">
             <p id="footer-text">&copy; 2025 Nexus Bot. All Rights Reserved.</p>
             <p class="text-sm mt-2">Nexus is not affiliated with Discord Inc.</p>
         </div>
     </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- CONFIGURATION ---
             const API_BASE_URL = 'http://us6.endercloud.host:4599/api/v1';
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            let allGuilds = []; // Cache for server search
+
+            // --- PAGE NAVIGATION ---
+            const pages = document.querySelectorAll('.page-content');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-            document.querySelectorAll('#mobile-menu a, .hidden.md\\:flex a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (link.closest('#mobile-menu')) mobileMenu.classList.add('hidden');
-                });
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            
+            window.showPage = (pageId) => {
+                pages.forEach(page => page.classList.remove('active'));
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    document.getElementById('home').classList.add('active');
+                }
+                mobileMenu.classList.add('hidden');
+            };
+
+            // Setup mobile menu
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
             });
+
+            // --- ANIMATIONS ---
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
             }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+            // --- API FETCHING ---
             const fetchBotInfo = async () => {
                 try {
                     const response = await fetch(`${API_BASE_URL}/bot-info`);
                     if (!response.ok) throw new Error('Network response was not ok for bot-info');
                     const data = await response.json();
+                    
                     document.title = `${data.name} - The Ultimate All-in-One Discord Bot`;
                     document.getElementById('bot-name-header').textContent = data.name;
                     document.getElementById('bot-name-btn1').textContent = data.name;
+                    
                     const logoImg = document.getElementById('bot-logo-img');
                     const logoSvg = document.getElementById('bot-logo-svg');
                     const favicon = document.getElementById('favicon');
@@ -190,22 +293,25 @@
                         logoSvg.classList.add('hidden');
                         favicon.href = data.avatar_url;
                     }
+                    
                     document.getElementById('invite-link-button').href = data.invite_url;
                     document.getElementById('support-link-button').href = data.support_server_url;
-                    document.getElementById('support-link-button-2').href = data.support_server_url;
                     document.getElementById('footer-text').innerHTML = `&copy; 2025 ${data.name}. All Rights Reserved.`;
-                    const botDetailsCard = document.getElementById('bot-details-card');
-                    const ownerDetailsCard = document.getElementById('owner-details-card');
+                    
                     const botCreatedAt = new Date(data.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     const ownerCreatedAt = new Date(data.owner.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    const botDetailsCard = document.getElementById('bot-details-card');
                     if(data.banner_url) botDetailsCard.style.backgroundImage = `url(${data.banner_url})`;
                     botDetailsCard.innerHTML = `<div class="relative z-10"><h3 class="text-2xl font-bold text-white mb-4">About ${data.name}</h3><img src="${data.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-blue-500"><p class="text-gray-300">ID: ${data.id}</p><p class="text-gray-300">Created: ${botCreatedAt}</p></div>`;
+                    
+                    const ownerDetailsCard = document.getElementById('owner-details-card');
                     if(data.owner.banner_url) ownerDetailsCard.style.backgroundImage = `url(${data.owner.banner_url})`;
                     ownerDetailsCard.innerHTML = `<div class="relative z-10"><h3 class="text-2xl font-bold text-white mb-4">Bot Owner</h3><img src="${data.owner.avatar_url}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-gray-500"><p class="text-xl font-semibold">${data.owner.name}#${data.owner.discriminator}</p><p class="text-gray-300">ID: ${data.owner.id}</p><p class="text-gray-300">Joined Discord: ${ownerCreatedAt}</p></div>`;
-                } catch (error) {
-                    console.error("Failed to fetch bot info:", error);
-                }
+
+                } catch (error) { console.error("Failed to fetch bot info:", error); }
             };
+
             const fetchGlobalStats = async () => {
                 try {
                     const response = await fetch(`${API_BASE_URL}/global-stats`);
@@ -218,6 +324,7 @@
                     document.getElementById('uptime').innerHTML = formatUptime(data.uptime_seconds);
                 } catch (error) {
                     console.error("Failed to fetch global stats:", error);
+                    // Fallback data
                     animateValue("servers-count", 0, 150000, 1500);
                     animateValue("users-count", 0, 25000000, 1500);
                     animateValue("commands-count", 0, 200, 1500);
@@ -225,35 +332,51 @@
                     document.getElementById('uptime').textContent = `N/A`;
                 }
             };
-            const fetchPremiumGuilds = async () => {
+            
+            const fetchGuilds = async () => {
                 try {
-                    const response = await fetch(`${API_BASE_URL}/premium-guilds`);
-                    if (!response.ok) throw new Error('Network response was not ok for premium-guilds');
-                    const premiumGuilds = await response.json();
-                    const premiumContainer = document.getElementById('premium-servers-container');
-                    if (premiumContainer) {
-                        premiumContainer.innerHTML = '';
-                        if (premiumGuilds.length === 0) {
-                            premiumContainer.innerHTML = `<p class="text-center text-gray-400 col-span-full">No premium servers to display yet!</p>`;
-                        } else {
-                           premiumGuilds.slice(0, 3).forEach(guild => {
-                                const guildCard = `
-                                    <div class="card p-6 rounded-lg text-center fade-in-up">
-                                        <img src="${guild.icon_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-indigo-500" alt="${guild.name} Icon" onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png';">
-                                        <h4 class="text-xl font-bold text-white truncate">${guild.name}</h4>
-                                        <p class="text-gray-400">${guild.member_count.toLocaleString()} Members</p>
-                                        <p class="text-indigo-400 font-semibold mt-1">${guild.plan}</p>
-                                    </div>
-                                `;
-                                premiumContainer.innerHTML += guildCard;
-                            });
-                        }
-                         document.querySelectorAll('#premium-servers-container .fade-in-up').forEach(el => observer.observe(el));
-                    }
-                } catch(error) {
-                    console.error("Failed to fetch premium guilds:", error);
+                    const response = await fetch(`${API_BASE_URL}/guilds`);
+                    if (!response.ok) throw new Error('Network response was not ok for guilds');
+                    allGuilds = await response.json();
+                    renderGuilds(allGuilds);
+                } catch (error) {
+                    console.error("Failed to fetch guilds:", error);
+                    document.getElementById('servers-container').innerHTML = `<p class="text-center text-gray-400 col-span-full">Failed to load server list. Please try again later.</p>`;
                 }
             };
+
+            // --- RENDERING ---
+            const renderGuilds = (guilds) => {
+                const container = document.getElementById('servers-container');
+                const noResults = document.getElementById('no-servers-found');
+                container.innerHTML = '';
+                if (guilds.length === 0) {
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+                noResults.classList.add('hidden');
+                
+                guilds.forEach(guild => {
+                    const guildCard = `
+                        <div class="card p-4 text-center fade-in-up">
+                            <img src="${guild.icon_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-gray-600" alt="${guild.name} Icon" onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png';">
+                            <h4 class="text-lg font-bold text-white truncate" title="${guild.name}">${guild.name}</h4>
+                            <p class="text-gray-400 text-sm">${guild.member_count.toLocaleString()} Members</p>
+                        </div>
+                    `;
+                    container.innerHTML += guildCard;
+                });
+                document.querySelectorAll('#servers-container .fade-in-up').forEach(el => observer.observe(el));
+            };
+            
+            // Server search functionality
+            document.getElementById('server-search').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredGuilds = allGuilds.filter(guild => guild.name.toLowerCase().includes(searchTerm));
+                renderGuilds(filteredGuilds);
+            });
+
+            // --- UTILITY FUNCTIONS ---
             function formatUptime(seconds) {
                 seconds = Number(seconds);
                 const d = Math.floor(seconds / (3600*24));
@@ -261,6 +384,7 @@
                 const m = Math.floor(seconds % 3600 / 60);
                 return `${d}d ${h}h ${m}m`;
             }
+
             function animateValue(id, start, end, duration) {
                 const obj = document.getElementById(id);
                 if (!obj) return;
@@ -269,26 +393,146 @@
                     if (!startTimestamp) startTimestamp = timestamp;
                     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                     obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    }
+                    if (progress < 1) window.requestAnimationFrame(step);
                 };
                 window.requestAnimationFrame(step);
             }
+            
+            // --- DYNAMIC CONTENT INJECTION for legal pages ---
+            const legalContent = {
+                terms: {
+                    title: "Terms and Conditions",
+                    content: `
+                        <p class="mb-4">Last Updated: September 2, 2025</p>
+                        <p>Welcome to Nexus! These terms and conditions outline the rules and regulations for the use of Nexus's Website and Discord Bot services. By accessing this website or using our bot, we assume you accept these terms and conditions. Do not continue to use Nexus if you do not agree to all of the terms and conditions stated on this page.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">1. Intellectual Property Rights</h4>
+                        <p>Other than the content you own, under these Terms, Nexus and/or its licensors own all the intellectual property rights and materials contained in this Website and Bot. You are granted a limited license only for purposes of viewing and using the material and services provided.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">2. User Responsibilities & Restrictions</h4>
+                        <p>You are specifically restricted from all of the following: publishing any bot or website material in any other media; selling, sublicensing and/or otherwise commercializing any material; using this bot in any way that is or may be damaging to the bot; using this bot in any way that impacts user access; using this bot contrary to applicable laws and regulations, or in any way may cause harm to the bot, or to any person or business entity.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">3. Premium Services & Payments</h4>
+                        <p>Payments for premium services are processed through third-party payment gateways. Premium features are tied to the Discord entity (server/user) for which they were purchased. We reserve the right to change our pricing at any time.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">4. Termination</h4>
+                        <p>We may terminate or suspend your access to our service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">5. Governing Law & Jurisdiction</h4>
+                        <p>These Terms will be governed by and interpreted in accordance with the laws of India, and you submit to the non-exclusive jurisdiction of the state and federal courts located in West Bengal for the resolution of any disputes.</p>
+                    `
+                },
+                privacy: {
+                    title: "Privacy Policy",
+                    content: `
+                        <p class="mb-4">Last Updated: September 2, 2025</p>
+                        <p>Your privacy is important to us. It is Nexus's policy to respect your privacy regarding any information we may collect while operating our services.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">1. Data We Collect</h4>
+                        <p>We collect information necessary for the bot's core functionality. This includes:</p>
+                        <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                          <li>Server-specific settings (e.g., prefix, welcome channels).</li>
+                          <li>User IDs for configurations (e.g., premium status).</li>
+                          <li>Server and Channel IDs to operate in your server.</li>
+                          <li>Anonymous command usage statistics for service improvement.</li>
+                        </ul>
+                        <p class="mt-2">We do not store message content, and we do not collect any personally identifiable information beyond what Discord provides (User ID, Server ID).</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">2. How We Use Data</h4>
+                        <p>Data is used exclusively to provide and improve our services, manage premium subscriptions, and for internal analytics. We will never sell your data to third parties.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">3. Data Security & Storage</h4>
+                        <p>We are committed to protecting your data. We implement industry-standard security measures to prevent unauthorized access, disclosure, alteration, or destruction of your information. Data is stored on secure, access-controlled databases.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">4. Your Rights</h4>
+                        <p>You have the right to request the deletion of your data. To do so, please remove the bot from your server and contact us on our support server. We will process your request in a timely manner.</p>
+                    `
+                },
+                shipping: {
+                    title: "Shipping & Delivery Policy",
+                    content: `
+                        <p class="mb-4">Last Updated: September 2, 2025</p>
+                        <p>All products and services provided by Nexus are digital in nature. There are no physical items to be shipped, and therefore, no shipping costs.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Instant Delivery</h4>
+                        <p>Premium features and subscriptions purchased through our website are delivered <strong>instantly</strong> upon successful payment confirmation from our payment processor. The features will be automatically activated on the Discord server or for the user account that was specified during the purchase process.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Confirmation</h4>
+                        <p>You will receive a confirmation within Discord via the bot upon successful activation of your premium services. If you do not receive this confirmation and the features are not active within 15 minutes of a successful payment, please proceed to the next step.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Delivery Issues</h4>
+                        <p>In the rare event that your premium features are not activated after a successful transaction, please contact us immediately. Join our <a href="#" id="shipping-support-link" target="_blank" class="text-blue-400 hover:underline">Discord Support Server</a> and open a support ticket with your transaction ID and the server/user ID for the purchase. Our support team will resolve the issue promptly.</p>
+                    `
+                },
+                refunds: {
+                    title: "Cancellation & Refund Policy",
+                    content: `
+                        <p class="mb-4">Last Updated: September 2, 2025</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">General Policy</h4>
+                        <p>Due to the nature of our products being instantly delivered, irrevocable digital services, <strong>all purchases made for Nexus premium features are final and strictly non-refundable</strong>. By completing your purchase, you agree that you understand and accept this no-refund policy.</p>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">We Do Not Offer Refunds For:</h4>
+                         <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                          <li>Accidental purchases.</li>
+                          <li>Dissatisfaction with the service.</li>
+                          <li>Forgetting to cancel a recurring subscription.</li>
+                          <li>Being banned from a server or from Discord.</li>
+                          <li>Not using the premium features.</li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Cancellation of Recurring Subscriptions</h4>
+                        <p>You are solely responsible for managing your recurring subscriptions. You can cancel your subscription at any time through the billing portal or payment provider you used to sign up. If you cancel, your premium access will remain active until the end of the current billing cycle. No pro-rated refunds will be issued.</p>
+                    `
+                },
+                contact: {
+                    title: "Contact Us",
+                    content: `
+                        <p class="mb-4">We're here to help with any questions, issues, or feedback you may have.</p>
+                        
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Primary Support Channel</h4>
+                        <p>For the fastest response to general questions, bug reports, and technical support, please join our official support server. Our dedicated support team and community members are active and ready to assist you.</p>
+                        <div class="mt-4">
+                           <a id="contact-support-link" href="#" class="btn btn-primary text-white font-bold py-3 px-8 rounded-full text-lg inline-block">Join Discord Support Server</a>
+                        </div>
+
+                        <h4 class="text-xl font-semibold text-gray-200 mt-6 mb-2">Business Inquiries</h4>
+                        <p>For business-related matters, partnerships, or other formal inquiries, you can reach our administrative team via email. Please note that technical support is not provided through this email address.</p>
+                        <p class="mt-2"><strong>Email:</strong> <a href="mailto:support@nexusbot.gg" class="text-blue-400 hover:underline">support@nexusbot.gg</a></p>
+                        <p class="text-gray-400">We aim to respond to business emails within 2-3 business days.</p>
+                    `
+                }
+            };
+
+            function createLegalPage(id) {
+                const data = legalContent[id];
+                const page = document.getElementById(id);
+                if (!page || !data) return;
+                page.innerHTML = `
+                    <section class="py-20 max-w-4xl mx-auto">
+                        <h2 class="text-4xl font-bold text-center text-white mb-12 fade-in-up">${data.title}</h2>
+                        <div class="card rounded-lg p-8 fade-in-up text-gray-300 space-y-4">
+                            ${data.content}
+                        </div>
+                    </section>
+                `;
+            }
+            Object.keys(legalContent).forEach(createLegalPage);
+            
+            // Re-run observer for dynamically added legal pages
+            document.querySelectorAll('.legal-page .fade-in-up').forEach(el => observer.observe(el));
+            
+            // Set dynamic support links
+            document.getElementById('shipping-support-link').href = document.getElementById('support-link-button').href;
+            document.getElementById('contact-support-link').href = document.getElementById('support-link-button').href;
+
+
+            // --- INITIALIZATION ---
             fetchBotInfo();
             fetchGlobalStats();
-            fetchPremiumGuilds();
+            fetchGuilds();
+            showPage('home'); // Show home page on load
         });
-        function openLegalTab(tabId) {
-            document.querySelectorAll('#legal-pages details').forEach(d => d.open = false);
-            const detailsElement = document.getElementById(tabId + '-details');
-            if (detailsElement) {
-                detailsElement.open = true;
-                setTimeout(() => {
-                    detailsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
-            }
-        }
     </script>
 </body>
 </html>
